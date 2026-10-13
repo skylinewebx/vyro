@@ -1,0 +1,10 @@
+node_modules
+dist
+cand
+cand2
+cand3
+sheet.mjs
+sheet.jpg
+s*.json
+s_*.html
+.claude
