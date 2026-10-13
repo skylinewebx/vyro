@@ -4,7 +4,6 @@
 // environment plus a yellow rim light so it belongs to the site's yellow-and-black set.
 // A designed GLB/GLTF can replace the procedural model: pass `modelUrl`.
 import * as THREE from 'three'
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
 
 const V2 = (x, y) => new THREE.Vector2(x, y)
@@ -53,6 +52,32 @@ function shadowTexture() {
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t
 }
 
+/* ------------------------------------------------------------------ studio environment
+   What the glossy parts reflect: the site's yellow wall, a black panel on the right (the wedge), a dark table and a large softbox —
+   so edges pick up the same yellow bounce that the photograph shows. */
+function makeStudio() {
+  const s = new THREE.Scene()
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(60, 64, 40), new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide }))
+  const pos = dome.geometry.attributes.position, col = []
+  const lo = new THREE.Color('#c99a00'), hi = new THREE.Color('#ffd000'), tmp = new THREE.Color()
+  for (let i = 0; i < pos.count; i++) {
+    const y = pos.getY(i) / 60
+    if (y > 0) tmp.copy(lo).lerp(hi, Math.min(1, y * 2.4)).multiplyScalar(1.15 + y * 0.5)
+    else tmp.set('#1a1203').multiplyScalar(0.5 + (1 + y) * 0.3)
+    col.push(tmp.r, tmp.g, tmp.b)
+  }
+  dome.geometry.setAttribute('color', new THREE.Float32BufferAttribute(col, 3)); s.add(dome)
+  const panel = (w, h, p, color, k) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(k), side: THREE.DoubleSide }))
+    m.position.set(...p); m.lookAt(0, 6, 0); s.add(m)
+  }
+  panel(36, 24, [-26, 32, 26], '#ffffff', 8)        // large softbox, upper left / front
+  panel(12, 46, [36, 12, -18], '#ffe066', 4)        // tall yellow strip behind right
+  panel(46, 46, [50, 12, 8], '#000000', 1)          // black panel on the right
+  panel(34, 16, [0, 7, -48], '#fff2c0', 2.4)        // soft back light
+  return s
+}
+
 /* ------------------------------------------------------------------ geometry helpers */
 function rrProfile(w, h, r, seg = 5) {
   const pts = [], hw = w / 2, hh = h / 2
@@ -94,12 +119,12 @@ export function buildHeadphone(env) {
   const grain = track(leatherTexture())
   const D = THREE.DoubleSide
   const M = {
-    plastic: track(new THREE.MeshPhysicalMaterial({ color: 0x0d0d0f, roughness: 0.56, metalness: 0.02, clearcoat: 0.12, clearcoatRoughness: 0.6, side: D, envMap: env })),
-    face: track(new THREE.MeshPhysicalMaterial({ color: 0x161618, roughness: 0.38, metalness: 0.08, clearcoat: 0.45, clearcoatRoughness: 0.35, side: D, envMap: env })),
-    leather: track(new THREE.MeshPhysicalMaterial({ color: 0x141416, roughness: 0.55, metalness: 0, bumpMap: grain, bumpScale: 0.85, sheen: 0.7, sheenColor: new THREE.Color(0x24242a), sheenRoughness: 0.5, side: D, envMap: env })),
-    pad: track(new THREE.MeshPhysicalMaterial({ color: 0x1c1c1f, roughness: 0.62, metalness: 0, bumpMap: grain, bumpScale: 0.6, sheen: 0.6, sheenColor: new THREE.Color(0x202026), sheenRoughness: 0.6, side: D, envMap: env })),
-    metal: track(new THREE.MeshStandardMaterial({ color: 0x8d8d95, metalness: 1, roughness: 0.3, side: D, envMap: env })),
-    darkMetal: track(new THREE.MeshStandardMaterial({ color: 0x202024, metalness: 0.85, roughness: 0.42, side: D, envMap: env })),
+    plastic: track(new THREE.MeshPhysicalMaterial({ color: 0x09090b, roughness: 0.56, metalness: 0.02, clearcoat: 0.12, clearcoatRoughness: 0.6, side: D, envMap: env, envMapIntensity: 0.32 })),
+    face: track(new THREE.MeshPhysicalMaterial({ color: 0x121214, roughness: 0.5, metalness: 0.04, clearcoat: 0.12, clearcoatRoughness: 0.5, side: D, envMap: env, envMapIntensity: 0.16 })),
+    leather: track(new THREE.MeshPhysicalMaterial({ color: 0x0b0b0d, roughness: 0.58, metalness: 0, bumpMap: grain, bumpScale: 0.6, sheen: 0.45, sheenColor: new THREE.Color(0x24242a), sheenRoughness: 0.5, side: D, envMap: env, envMapIntensity: 0.28 })),
+    pad: track(new THREE.MeshPhysicalMaterial({ color: 0x1c1c1f, roughness: 0.62, metalness: 0, bumpMap: grain, bumpScale: 0.45, sheen: 0.4, sheenColor: new THREE.Color(0x202026), sheenRoughness: 0.6, side: D, envMap: env, envMapIntensity: 0.28 })),
+    metal: track(new THREE.MeshStandardMaterial({ color: 0x8d8d95, metalness: 1, roughness: 0.34, side: D, envMap: env, envMapIntensity: 0.38 })),
+    darkMetal: track(new THREE.MeshStandardMaterial({ color: 0x202024, metalness: 0.85, roughness: 0.42, side: D, envMap: env, envMapIntensity: 0.4 })),
     fabric: track(new THREE.MeshStandardMaterial({ color: 0x09090b, roughness: 1, side: D })),
     rubber: track(new THREE.MeshStandardMaterial({ color: 0x0b0b0d, roughness: 0.85, side: D })),
   }
@@ -125,7 +150,7 @@ export function buildHeadphone(env) {
     const cg = new THREE.LatheGeometry(capPts, 120); cg.computeVertexNormals(); add(cg, M.face, local).scale.setScalar(1.004)
     const ring = add(new THREE.TorusGeometry(3.6, 0.045, 10, 150), M.metal, local); ring.rotation.x = Math.PI / 2; ring.position.y = 1.09
 
-    const cush = smooth([[3.3, -1.28], [4.0, -1.3], [4.45, -1.56], [4.62, -2.0], [4.58, -2.66], [4.3, -3.12], [3.8, -3.44], [3.15, -3.56], [2.7, -3.44], [2.4, -3.1], [2.28, -2.6], [2.36, -2.0], [2.65, -1.5], [3.0, -1.3]], 100)
+    const cush = smooth([[3.3, -1.28], [3.95, -1.3], [4.32, -1.52], [4.42, -1.95], [4.4, -2.6], [4.2, -3.1], [3.8, -3.36], [3.2, -3.46], [2.7, -3.36], [2.45, -3.1], [2.38, -2.6], [2.45, -2.0], [2.7, -1.5], [3.0, -1.3]], 100)
     const kg = new THREE.LatheGeometry(cush, 120); kg.computeVertexNormals(); add(kg, M.leather, local)
     const dish = smooth([[0, -3.0], [1.1, -2.95], [1.8, -2.75], [2.15, -2.4]], 20)
     const dg = new THREE.LatheGeometry(dish, 64); dg.computeVertexNormals(); add(dg, M.fabric, local)
@@ -171,15 +196,15 @@ export async function createViewer({ container, reduced = false, modelUrl = null
 
   const scene = new THREE.Scene()
   const pmrem = new THREE.PMREMGenerator(renderer)
-  const envScene = new RoomEnvironment()
+  const envScene = makeStudio()
   const envTex = pmrem.fromScene(envScene, 0.04).texture
   scene.environment = envTex
-  if ('environmentIntensity' in scene) scene.environmentIntensity = 0.9
+  if ('environmentIntensity' in scene) scene.environmentIntensity = 1.0
 
-  const key = new THREE.DirectionalLight(0xffffff, 2.3); key.position.set(-18, 26, 24); scene.add(key)
-  const rim = new THREE.DirectionalLight(0xffc900, 2.0); rim.position.set(24, 9, -22); scene.add(rim)
-  const rim2 = new THREE.DirectionalLight(0xffd54a, 0.9); rim2.position.set(-26, 6, -16); scene.add(rim2)
-  const fill = new THREE.DirectionalLight(0xffffff, 0.6); fill.position.set(14, 6, 28); scene.add(fill)
+  const key = new THREE.DirectionalLight(0xffffff, 1.2); key.position.set(-18, 26, 24); scene.add(key)
+  const rim = new THREE.DirectionalLight(0xffc900, 0.9); rim.position.set(24, 9, -22); scene.add(rim)
+  const rim2 = new THREE.DirectionalLight(0xffd54a, 0.4); rim2.position.set(-26, 6, -16); scene.add(rim2)
+  const fill = new THREE.DirectionalLight(0xffffff, 0.4); fill.position.set(14, 6, 28); scene.add(fill)
 
   // model (+ a dim mirrored copy under the floor line for the glossy-table reflection)
   let model, modelDispose = () => {}, modelHeight = 20
@@ -205,16 +230,17 @@ export async function createViewer({ container, reduced = false, modelUrl = null
   shadow.rotation.x = -Math.PI / 2; shadow.position.y = 0.02; scene.add(shadow)
 
   // camera (orbits the headphone; the base is pinned to the floor line of the page)
-  const camera = new THREE.PerspectiveCamera(28, 1, 1, 400)
+  const camera = new THREE.PerspectiveCamera(19, 1, 1, 600)
   const target = new THREE.Vector3(0, modelHeight * 0.46, 0)
-  let theta = 0.75, phi = 1.45, radius = 60, W = 1, H = 1, baseFrac = 0.78, vTheta = 0
-  const PHI_MIN = 0.5, PHI_MAX = 1.53
+  let theta = 0.75, phi = 1.62, radius = 60, W = 1, H = 1, baseFrac = 0.78, vTheta = 0
+  let camHeight = 3.2      // camera sits just above the table: with a high camera the near cup dips and the far cup rises as it turns (a see-saw)
   const fit = () => {
     W = container.clientWidth || 1; H = container.clientHeight || 1
     renderer.setSize(W, H, false); camera.aspect = W / H
     baseFrac = getBaseFrac() || 0.78
     const halfV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)), halfH = halfV * camera.aspect
     radius = Math.max((modelHeight * 1.08) / (2 * halfV * baseFrac * 0.94), (21 * 0.94) / (2 * halfH * 0.9))
+    phi = Math.acos(THREE.MathUtils.clamp((camHeight - target.y) / radius, -1, 1))
   }
   const tmp = new THREE.Vector3()
   const place = () => {
@@ -235,16 +261,15 @@ export async function createViewer({ container, reduced = false, modelUrl = null
   const move = (e) => {
     if (!dragging) return
     const now = performance.now(), dt = Math.max(1, now - lastT) / 1000
-    const dx = e.clientX - lastX, dy = e.clientY - lastY, dTheta = -dx * 0.0085
+    const dx = e.clientX - lastX, dTheta = -dx * 0.0085
     theta += dTheta; vTheta = THREE.MathUtils.lerp(vTheta, dTheta / dt, 0.4)
-    if (e.pointerType === 'mouse') phi = THREE.MathUtils.clamp(phi - dy * 0.005, PHI_MIN, PHI_MAX)
     lastX = e.clientX; lastY = e.clientY; lastT = now; touched()
   }
   const up = (e) => { dragging = false; canvas.style.cursor = 'grab'; try { canvas.releasePointerCapture(e.pointerId) } catch {} ; vTheta = THREE.MathUtils.clamp(vTheta, -6, 6) }
   const key_ = (e) => {
-    const k = { ArrowLeft: [-0.18, 0], ArrowRight: [0.18, 0], ArrowUp: [0, -0.1], ArrowDown: [0, 0.1] }[e.key]
+    const k = { ArrowLeft: [-0.18, 0], ArrowRight: [0.18, 0] }[e.key]
     if (!k) return
-    e.preventDefault(); theta += k[0]; phi = THREE.MathUtils.clamp(phi + k[1], PHI_MIN, PHI_MAX); idle = 0; auto = 0; touched()
+    e.preventDefault(); theta += k[0]; idle = 0; auto = 0; touched()
   }
   canvas.tabIndex = 0
   canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); onLost() })
@@ -267,7 +292,7 @@ export async function createViewer({ container, reduced = false, modelUrl = null
   document.addEventListener('visibilitychange', onVis)
   const ro = new ResizeObserver(() => { fit(); place(); renderer.render(scene, camera) })
   ro.observe(container)
-  if (import.meta.env.DEV) window.__vy = { get theta() { return theta }, set theta(v) { theta = v }, get phi() { return phi }, set phi(v) { phi = v }, get auto() { return auto }, get radius() { return radius }, get frames() { return frames }, get dragging() { return dragging }, advance(sec) { for (let t = 0; t < sec; t += 1 / 60) update(1 / 60); place(); renderer.render(scene, camera) }, render() { place(); renderer.render(scene, camera) } }
+  if (import.meta.env.DEV) window.__vy = { get theta() { return theta }, set theta(v) { theta = v }, get phi() { return phi }, set camHeight(v) { camHeight = v; fit() }, feetY() { const f = (x) => (1 - tmp.set(x, 0, 0).project(camera).y) / 2 * H; return [f(6.6), f(-6.6)] }, topY() { return (1 - tmp.set(0, modelHeight, 0).project(camera).y) / 2 * H }, get auto() { return auto }, get radius() { return radius }, get frames() { return frames }, get dragging() { return dragging }, advance(sec) { for (let t = 0; t < sec; t += 1 / 60) update(1 / 60); place(); renderer.render(scene, camera) }, render() { place(); renderer.render(scene, camera) } }
 
   place(); renderer.render(scene, camera); setVisible(true); onReady()
 
