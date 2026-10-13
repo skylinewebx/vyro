@@ -60,10 +60,11 @@ button { cursor: pointer; }
 
 @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
 
-/* headphone showcase */
-.stage { background: linear-gradient(180deg, #f5ca03 0px, #eec302 calc(var(--floor, 80%) - 160px), #c9a102 calc(var(--floor, 80%) - 20px), #1b1605 calc(var(--floor, 80%) + 10px), #0a0904 100%); }
-.stage-static { background: linear-gradient(180deg, #f5ca03, #eec302); }
-.plate-mask { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 5%); mask-image: linear-gradient(to bottom, transparent 0, #000 5%); }
-.callout-line { filter: drop-shadow(0 0 1.5px rgba(255,255,255,.85)); }
-.callout-ring { transform-box: fill-box; transform-origin: center; animation: ringpulse 1.8s ease-out infinite; }
-@keyframes ringpulse { 0% { transform: scale(.8); opacity: .75; } 100% { transform: scale(2.8); opacity: 0; } }
+/* 3D headphone showroom — yellow set with a soft black diagonal, like the reference photograph */
+.showroom { background: linear-gradient(112deg, rgba(8,8,8,0) 0 58%, rgba(8,8,8,.5) 64%, #070707 71%, #060606 100%), linear-gradient(180deg, #f3b704 0%, #ffd000 24%, #ffc800 100%); }
+.showroom canvas:focus-visible { outline: 2px solid #080808; outline-offset: -4px; }
+
+/* music section: backdrop sampled from the portrait's own yellow so the photo blends in */
+.music-bg { background: linear-gradient(180deg, #f1b801 0%, #f7c101 45%, #edb501 100%); }
+@media (min-width: 768px) { .music-photo { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 16%); mask-image: linear-gradient(to right, transparent 0, #000 16%); } }
+.poster-fade { -webkit-mask-image: radial-gradient(ellipse 72% 78% at 50% 50%, #000 58%, transparent 100%); mask-image: radial-gradient(ellipse 72% 78% at 50% 50%, #000 58%, transparent 100%); }

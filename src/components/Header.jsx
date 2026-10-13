@@ -48,19 +48,13 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [overStage, setOverStage] = useState(false)
-  const [q, setQ] = useState('')
+    const [q, setQ] = useState('')
   const firstLink = useRef(null)
   const searchInput = useRef(null)
 
   useEffect(() => { setMenuOpen(false); setSearchOpen(false) }, [pathname])
   useEffect(() => {
-    const on = () => {
-      setScrolled(window.scrollY > 40)
-      // while the pinned headphone showcase sits under the header, keep the header transparent on its yellow stage
-      const st = document.getElementById('showcase')
-      if (st) { const r = st.getBoundingClientRect(); setOverStage(r.top <= 1 && r.bottom >= 96) } else setOverStage(false)
-    }
+    const on = () => setScrolled(window.scrollY > 40)
     on(); window.addEventListener('scroll', on, { passive: true })
     return () => window.removeEventListener('scroll', on)
   }, [])
@@ -73,7 +67,7 @@ export default function Header() {
     return () => window.removeEventListener('keydown', esc)
   }, [menuOpen, searchOpen])
 
-  const onYellow = ((yellowTop(pathname) && !scrolled) || (pathname === '/' && overStage)) && !menuOpen && !searchOpen
+  const onYellow = yellowTop(pathname) && !scrolled && !menuOpen && !searchOpen
   const matches = q.trim() ? products.filter((p) => (p.name + ' ' + p.kind + ' ' + p.category).toLowerCase().includes(q.trim().toLowerCase())).slice(0, 5) : []
   const submit = (e) => { e.preventDefault(); navigate(`/shop${q.trim() ? `?q=${encodeURIComponent(q.trim())}` : ''}`); setQ('') }
 

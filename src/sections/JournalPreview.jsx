@@ -23,7 +23,7 @@ export function ArticleCard({ a, i = 0 }) {
 
 export default function JournalPreview() {
   return (
-    <section className="bg-ink px-5 md:px-10 py-20 md:py-32 border-t border-gold/10" aria-labelledby="jr-h">
+    <section className="bg-ink px-5 md:px-10 py-24 md:py-40 border-t border-gold/10" aria-labelledby="jr-h">
       <SectionHead n="05" title={<span id="jr-h">From our journal</span>} link="/journal">Tips, stories and insights from the world of sound.</SectionHead>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {articles.slice(0, 4).map((a, i) => <ArticleCard key={a.slug} a={a} i={i} />)}

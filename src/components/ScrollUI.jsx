@@ -11,12 +11,7 @@ export function ScrollProgress() {
 export function BackToTop() {
   const [show, setShow] = useState(false)
   useEffect(() => {
-    const on = () => {
-      const st = document.getElementById('showcase')
-      const r = st && st.getBoundingClientRect()
-      const inShowcase = r && r.top <= 0 && r.bottom >= window.innerHeight * 0.5   // pinned showcase has its own index + cards
-      setShow(window.scrollY > 900 && !inShowcase && window.scrollY < document.documentElement.scrollHeight - window.innerHeight - 320)
-    }
+    const on = () => setShow(window.scrollY > 900 && window.scrollY < document.documentElement.scrollHeight - window.innerHeight - 320)
     on(); window.addEventListener('scroll', on, { passive: true })
     return () => window.removeEventListener('scroll', on)
   }, [])

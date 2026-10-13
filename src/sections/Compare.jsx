@@ -47,8 +47,8 @@ export default function Compare() {
   const [a, setA] = useState('vyro-one')
   const [b, setB] = useState('vyro-pro')
   return (
-    <section className="bg-ink px-5 md:px-[5.3vw] py-20 md:py-32 border-t border-gold/10" aria-labelledby="cmp-h">
-      <div className="grid lg:grid-cols-[0.8fr_2fr] gap-10 lg:gap-14 items-start">
+    <section className="bg-ink px-5 md:px-[5.3vw] py-24 md:py-40 border-t border-gold/10" aria-labelledby="cmp-h">
+      <div className="grid lg:grid-cols-[0.8fr_2fr] gap-12 lg:gap-16 items-start">
         <div>
           <Reveal className="eyebrow flex items-center gap-4 mb-5 text-gold"><span>04</span><span className="tick" /></Reveal>
           <Reveal as="h2" id="cmp-h" delay={0.05} className="h-sec">Compare<br />&amp; choose</Reveal>
