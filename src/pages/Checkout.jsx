@@ -82,7 +82,7 @@ export default function Checkout() {
           <ul className="divide-y divide-warm/10">
             {items.map((l) => (
               <li key={l.slug + l.color} className="flex gap-4 py-4">
-                <img src={l.product.image} alt="" className="w-16 h-16 object-cover photo" style={{ objectPosition: l.product.pos }} />
+                <img src={l.product.image} alt="" className="w-16 h-16 object-cover object-[68%_50%] bg-ink" />
                 <div className="flex-1 text-sm">
                   <p className="font-display">{l.product.name}</p><p className="opacity-60 text-xs">{l.color}</p>
                   <div className="flex gap-3 items-center mt-2 text-xs">

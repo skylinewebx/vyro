@@ -7,7 +7,7 @@ export function ArticleCard({ a, i = 0 }) {
   return (
     <Reveal as="article" delay={(i % 4) * 0.08} className="group relative">
       <Link to={`/journal/${a.slug}`} className="block">
-        <div className="aspect-[4/5] overflow-hidden bg-char relative">
+        <div className="aspect-[4/3] sm:aspect-[5/4] overflow-hidden bg-char relative">
           <img src={a.image} alt={a.title} loading="lazy" className="photo w-full h-full object-cover transition-transform duration-[1100ms] group-hover:scale-[1.06]" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 p-5">

@@ -34,19 +34,21 @@ export function Reveal({ as = 'div', delay = 0, y = 28, className = '', children
 }
 
 /** Masked image reveal + scroll parallax. */
-export function ParallaxImage({ src, alt, className = '', imgClass = '', pos = '50% 50%', speed = 9, eager = false, filter = true }) {
+export function ParallaxImage({ src, alt, className = '', imgClass = '', pos = '50% 50%', speed = 5, eager = false, filter = true }) {
   const wrap = useRef(null)
   const img = useRef(null)
   const rm = useReducedMotion()
   useEffect(() => {
     if (rm || !img.current) return
-    const ctx = gsap.context(() => {
+    // parallax only on larger screens — keeps phones light and scrolling stable
+    const mm = gsap.matchMedia()
+    mm.add('(min-width: 768px)', () => {
       gsap.fromTo(img.current, { yPercent: -speed }, {
         yPercent: speed, ease: 'none',
-        scrollTrigger: { trigger: wrap.current, start: 'top bottom', end: 'bottom top', scrub: true },
+        scrollTrigger: { trigger: wrap.current, start: 'top bottom', end: 'bottom top', scrub: 0.6 },
       })
     }, wrap)
-    return () => ctx.revert()
+    return () => mm.revert()
   }, [rm, speed])
   return (
     <motion.div

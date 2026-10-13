@@ -22,8 +22,6 @@ export default function SmoothScroll() {
   }, [])
 
   useEffect(() => {
-    if (window.__lenis) window.__lenis.scrollTo(0, { immediate: true })
-    else window.scrollTo(0, 0)
     const t = setTimeout(() => ScrollTrigger.refresh(), 400)
     return () => clearTimeout(t)
   }, [pathname])

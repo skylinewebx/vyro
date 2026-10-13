@@ -41,7 +41,7 @@ export default function CartDrawer() {
                 <ul className="flex-1 overflow-y-auto px-6 divide-y divide-warm/10">
                   {items.map((l) => (
                     <li key={l.slug + l.color} className="flex gap-4 py-5">
-                      <img src={l.product.image} alt={l.product.name} className="w-24 h-24 object-cover photo" style={{ objectPosition: l.product.pos }} />
+                      <img src={l.product.image} alt={l.product.name} className="w-24 h-24 object-cover object-[68%_50%] bg-ink" />
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between gap-2">
                           <Link to={`/product/${l.slug}`} onClick={() => setOpen(false)} className="font-display text-sm hover:text-vy">{l.product.name}</Link>

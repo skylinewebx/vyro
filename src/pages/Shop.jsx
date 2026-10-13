@@ -3,10 +3,17 @@ import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
 import { products, categories } from '../data/products'
-import ProductCard from '../components/ProductCard'
+import { ProductTile } from '../components/ProductCard'
 import { Reveal, EASE } from '../components/ui'
 
 const sorts = [['featured', 'Featured'], ['price-asc', 'Price: low to high'], ['price-desc', 'Price: high to low'], ['name', 'Name A–Z']]
+const count = (c) => (c === 'all' ? products.length : products.filter((p) => p.category === c).length)
+
+const HeadLine = ({ children, delay = 0 }) => (
+  <span className="block overflow-hidden pb-[.08em]">
+    <motion.span className="block" initial={{ y: '105%' }} animate={{ y: 0 }} transition={{ duration: 1, ease: EASE, delay }}>{children}</motion.span>
+  </span>
+)
 
 export default function Shop() {
   const { category = 'all' } = useParams()
@@ -21,23 +28,24 @@ export default function Shop() {
     setSp(n, { replace: true })
   }
 
-  const valid = categories.some((c) => c.slug === category)
   const list = useMemo(() => {
     let l = products.filter((p) => category === 'all' || p.category === category)
     const t = q.trim().toLowerCase()
-    if (t) l = l.filter((p) => [p.name, p.kind, p.category, p.blurb, ...p.colors.map((c) => c.name)].join(' ').toLowerCase().includes(t))
-    const s = { featured: (a, b) => a.featured - b.featured, 'price-asc': (a, b) => a.price - b.price, 'price-desc': (a, b) => b.price - a.price, name: (a, b) => a.name.localeCompare(b.name) }[sort] || (() => 0)
+    if (t) l = l.filter((p) => [p.name, p.kind, p.tagline, p.category, ...p.colors.map((c) => c.name)].join(' ').toLowerCase().includes(t))
+    const s = { featured: (a, b) => a.index.localeCompare(b.index), 'price-asc': (a, b) => a.price - b.price, 'price-desc': (a, b) => b.price - a.price, name: (a, b) => a.name.localeCompare(b.name) }[sort] || (() => 0)
     return [...l].sort(s)
   }, [category, q, sort])
 
-  const title = { all: 'The VYRO Collection', headphones: 'Headphones', earbuds: 'Wireless Earbuds', accessories: 'Accessories' }[category] || 'The VYRO Collection'
+  const heading = { all: ['The VYRO', 'Collection'], headphones: ['Headphones'], earbuds: ['Earbuds'], accessories: ['Accessories'] }[category] || ['The VYRO', 'Collection']
 
   const controls = (stacked) => (
     <div className={stacked ? 'space-y-8' : 'flex flex-wrap items-center gap-x-8 gap-y-4 w-full'}>
       <nav aria-label="Categories" className={stacked ? 'flex flex-col gap-3' : 'flex flex-wrap gap-2'}>
         {categories.map((c) => (
           <Link key={c.slug} to={{ pathname: c.to, search: sp.toString() ? `?${sp}` : '' }} onClick={() => setSheet(false)} aria-current={c.slug === category ? 'page' : undefined}
-            className={`eyebrow border px-4 py-2.5 transition-colors ${c.slug === category ? 'bg-vy text-ink border-vy' : 'border-warm/25 hover:border-vy'}`}>{c.label}</Link>
+            className={`eyebrow border px-4 py-2.5 transition-colors duration-300 ${c.slug === category ? 'bg-vy text-ink border-vy' : 'border-warm/25 hover:border-vy'}`}>
+            {c.label}{c.slug !== 'accessories' && <span className="opacity-60 ml-2">{count(c.slug)}</span>}
+          </Link>
         ))}
       </nav>
       <div className={stacked ? '' : 'flex-1 min-w-[12rem] max-w-sm'}>
@@ -61,24 +69,20 @@ export default function Shop() {
       {/* Editorial banner */}
       <section className="relative bg-vy text-ink on-yellow overflow-hidden pt-28 md:pt-36">
         <div className="grid md:grid-cols-[1.5fr_1fr] items-end">
-          <div className="px-5 md:px-10 pb-10 md:pb-16">
+          <div className="px-5 md:px-[5.3vw] pb-10 md:pb-16">
             <Reveal className="eyebrow flex items-center gap-4 mb-5"><span>Shop</span><span className="tick" /><span>{list.length} products</span></Reveal>
-            <h1 className="h-hero !text-[clamp(2.1rem,8.4vw,6.4rem)]">
-              {category === 'all' ? <><span className="block overflow-hidden"><motion.span className="block" initial={{ y: '105%' }} animate={{ y: 0 }} transition={{ duration: 1, ease: EASE }}>The VYRO</motion.span></span>
-                <span className="block overflow-hidden"><motion.span className="block" initial={{ y: '105%' }} animate={{ y: 0 }} transition={{ duration: 1, ease: EASE, delay: 0.12 }}>Collection</motion.span></span></>
-                : <span className="block overflow-hidden"><motion.span className="block" initial={{ y: '105%' }} animate={{ y: 0 }} transition={{ duration: 1, ease: EASE }}>{title}</motion.span></span>}
+            <h1 className="h-hero !text-[clamp(2.1rem,8.2vw,6.2rem)]">
+              {heading.map((h, i) => <HeadLine key={h} delay={i * 0.12}>{h}</HeadLine>)}
             </h1>
             <p className="mt-5 max-w-sm font-medium text-[.95rem]">Premium audio gear for every vibe. Find your perfect sound.</p>
           </div>
           <div className="relative h-48 md:h-80 bg-ink">
-            <img src="/img/yellow.jpg" alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover object-[75%_50%]" />
-            <div className="absolute inset-0 bg-gradient-to-r from-vy/30 via-transparent to-transparent" />
+            <img src="/img/yellow.jpg" alt="" aria-hidden width={1600} height={1067} className="absolute inset-0 w-full h-full object-cover object-[75%_50%]" />
           </div>
         </div>
       </section>
 
-      {/* Toolbar */}
-      <section className="bg-ink px-5 md:px-10 pt-10 pb-24 min-h-[60vh]">
+      <section className="bg-ink px-5 md:px-[5.3vw] pt-10 pb-16 min-h-[60vh]">
         <div className="hidden lg:flex mb-10">{controls(false)}</div>
         <div className="lg:hidden mb-8 flex items-center justify-between gap-4">
           <p className="text-sm opacity-70" aria-live="polite">{list.length} result{list.length === 1 ? '' : 's'}</p>
@@ -86,8 +90,8 @@ export default function Shop() {
         </div>
 
         {list.length > 0 ? (
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            {list.map((p, i) => <ProductCard key={p.slug} product={p} index={i} />)}
+          <div className="grid gap-3 md:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {list.map((p, i) => <ProductTile key={p.slug} product={p} index={i} />)}
           </div>
         ) : (
           <div className="py-24 text-center max-w-md mx-auto">
@@ -96,7 +100,11 @@ export default function Shop() {
             {q ? <button onClick={() => setParam('q', '')} className="btn btn-yellow">Clear search</button> : <Link to="/shop" className="btn btn-yellow">Shop all →</Link>}
           </div>
         )}
-        {!valid && <p className="sr-only">Unknown category</p>}
+
+        <div className="mt-12 flex items-center justify-between eyebrow text-[.6rem] opacity-60">
+          <span className="flex items-center gap-4">Audio for every moment <span className="tick" /></span>
+          <span className="flex items-center gap-4">VYRO <span className="tick" /> {String(list.length).padStart(2, '0')} / {products.length}</span>
+        </div>
       </section>
 
       {/* Mobile filter sheet */}

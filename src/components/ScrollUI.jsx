@@ -11,7 +11,7 @@ export function ScrollProgress() {
 export function BackToTop() {
   const [show, setShow] = useState(false)
   useEffect(() => {
-    const on = () => setShow(window.scrollY > 900)
+    const on = () => setShow(window.scrollY > 900 && window.scrollY < document.documentElement.scrollHeight - window.innerHeight - 320)
     on(); window.addEventListener('scroll', on, { passive: true })
     return () => window.removeEventListener('scroll', on)
   }, [])

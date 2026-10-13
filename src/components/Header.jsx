@@ -142,7 +142,7 @@ export default function Header() {
                 {matches.map((p) => (
                   <li key={p.slug}>
                     <Link to={`/product/${p.slug}`} className="flex items-center gap-4 py-4 hover:text-vy transition-colors">
-                      <img src={p.image} alt="" className="w-14 h-14 object-cover photo" />
+                      <img src={p.image} alt="" className="w-14 h-14 object-cover object-[68%_50%] bg-ink" />
                       <span className="flex-1"><span className="block font-display text-sm">{p.name}</span><span className="text-xs opacity-60">{p.kind}</span></span>
                       <span className="text-sm">{money(p.price)}</span>
                     </Link>

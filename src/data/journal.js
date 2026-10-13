@@ -5,7 +5,7 @@ export const articles = [
   { slug: 'music-focus-and-productivity', tag: 'Lifestyle', title: 'Music, Focus and Productivity', image: '/img/j2.jpg', read: '5 min',
     excerpt: 'Building a listening routine that helps deep work feel effortless.',
     body: ['Sound shapes mood, and mood shapes output. Many people find that familiar, low-lyric music helps them settle into long stretches of focused work.', 'Pair a consistent playlist with noise cancellation and a clear start ritual, and your brain begins to associate those sounds with getting into flow.', 'Take breaks too. Silence is also a tool — a few minutes without audio can reset attention better than another track.'] },
-  { slug: 'choosing-the-right-earbuds', tag: 'Product Guides', title: 'Choosing the Right Earbuds for Your Lifestyle', image: '/img/air.jpg', read: '6 min',
+  { slug: 'choosing-the-right-earbuds', tag: 'Product Guides', title: 'Choosing the Right Earbuds for Your Lifestyle', image: '/img/p/p13.webp', read: '6 min',
     excerpt: 'Commute, gym or desk — match the fit and features to the way you live.',
     body: ['Start with where you listen most. Commuters tend to value noise cancellation and battery life; athletes prioritise a secure fit and water resistance.', 'Think about the case. A pocketable charging case can matter as much as the earbuds themselves if you are always on the go.', 'Finally, check comfort. The best earbuds are the ones you forget you are wearing.'] },
   { slug: 'the-power-of-music-in-everyday-life', tag: 'Inspiration', title: 'The Power of Music in Everyday Life', image: '/img/j1.jpg', read: '3 min',
