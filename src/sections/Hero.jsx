@@ -39,6 +39,7 @@ export default function Hero() {
           Premium Audio<br />For a Higher<br />Tomorrow
           <span className="block w-9 h-px bg-ink mt-5" />
         </motion.p>
+        <motion.p {...fade(0.4)} className="sm:hidden eyebrow !text-[.56rem] !tracking-[.2em] font-medium mb-4 flex items-center gap-3">Premium Audio <span className="w-5 h-px bg-ink" /> For a Higher Tomorrow</motion.p>
         <h1 className="h-hero md:mt-24">
           <Line delay={0.35} tm>Feel every</Line>
           <Line delay={0.5} tm>Frequency</Line>

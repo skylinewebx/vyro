@@ -69,5 +69,5 @@ button { cursor: pointer; }
 
 /* turning headphone: glossy table, a soft highlight that follows the turn, and a faint reflection */
 .showroom-floor { background: linear-gradient(90deg, transparent 52%, rgba(0,0,0,.78) 84%), linear-gradient(180deg, #4d3c06 0%, #221a07 16%, #0c0a05 46%, #050505 100%); box-shadow: inset 0 1px 0 rgba(255, 218, 70, .5); }
-.headphone-sheen { background: linear-gradient(100deg, transparent 38%, rgba(255,255,255,.2) 50%, transparent 62%) 50% 0 / 260% 100% no-repeat; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; mix-blend-mode: screen; }
-.headphone-reflection { transform: scaleY(-1); opacity: .3; -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,.9), transparent 42%); mask-image: linear-gradient(to top, rgba(0,0,0,.9), transparent 42%); filter: blur(1.5px); }
+.reflection-fade { background: linear-gradient(180deg, rgba(8,7,4,0) 0%, rgba(8,7,4,.82) 55%, rgba(5,5,5,.97) 100%); }
+.showroom [role=group] canvas:focus-visible { outline: 2px solid #080808; outline-offset: -4px; }
