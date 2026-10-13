@@ -21,7 +21,7 @@ button { cursor: pointer; }
 .font-display { font-family: var(--font-display); }
 .eyebrow { font-size: .68rem; letter-spacing: .28em; text-transform: uppercase; font-weight: 600; }
 .h-hero { font-family: var(--font-display); font-weight: 300; line-height: 1; letter-spacing: -.04em; text-transform: uppercase; font-size: clamp(1.95rem, 8.9vw, 3.4rem); }
-@media (min-width: 768px) { .h-hero { font-size: clamp(2.8rem, 6.15vw, 8rem); } }
+@media (min-width: 768px) { .h-hero { font-size: clamp(2.8rem, 5.2vw, 8rem); } }
 .h-sec { font-family: var(--font-display); font-weight: 300; line-height: 1.04; letter-spacing: -.035em; text-transform: uppercase; font-size: clamp(1.8rem, 4.6vw, 4rem); }
 .photo { filter: grayscale(.55) sepia(.18) contrast(1.06) brightness(.96); }
 .tick { display: inline-block; width: 2.6rem; height: 1px; background: currentColor; vertical-align: middle; }

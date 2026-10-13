@@ -30,7 +30,7 @@ export default function Hero() {
         src="/img/hero.webp" width={1480} height={1718}
         alt="A woman with her eyes closed, wearing glasses, a black turtleneck and black VYRO over-ear headphones, against a vivid yellow backdrop"
         fetchPriority="high" decoding="async"
-        className="hero-photo absolute bottom-0 right-0 w-[104vw] max-w-none h-auto md:w-auto md:h-[min(91svh,64vw)] md:right-[7vw]"
+        className="hero-photo absolute bottom-0 right-0 w-[104vw] max-w-none h-auto md:w-auto md:h-[min(91svh,56vw)] md:right-[7vw]"
         initial={rm ? false : { opacity: 0, x: 28, scale: 1.03 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ duration: 1.5, ease: EASE, delay: 0.1 }}
       />
 
