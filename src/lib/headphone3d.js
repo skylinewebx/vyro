@@ -119,9 +119,9 @@ export function buildHeadphone(env) {
   const grain = track(leatherTexture())
   const D = THREE.DoubleSide
   const M = {
-    plastic: track(new THREE.MeshPhysicalMaterial({ color: 0x09090b, roughness: 0.56, metalness: 0.02, clearcoat: 0.12, clearcoatRoughness: 0.6, side: D, envMap: env, envMapIntensity: 0.32 })),
-    face: track(new THREE.MeshPhysicalMaterial({ color: 0x121214, roughness: 0.5, metalness: 0.04, clearcoat: 0.12, clearcoatRoughness: 0.5, side: D, envMap: env, envMapIntensity: 0.16 })),
-    leather: track(new THREE.MeshPhysicalMaterial({ color: 0x0b0b0d, roughness: 0.58, metalness: 0, bumpMap: grain, bumpScale: 0.6, sheen: 0.45, sheenColor: new THREE.Color(0x24242a), sheenRoughness: 0.5, side: D, envMap: env, envMapIntensity: 0.28 })),
+    plastic: track(new THREE.MeshPhysicalMaterial({ color: 0x1b1b1f, roughness: 0.6, metalness: 0.02, clearcoat: 0.1, clearcoatRoughness: 0.6, side: D, envMap: env, envMapIntensity: 0.4 })),
+    face: track(new THREE.MeshPhysicalMaterial({ color: 0x232327, roughness: 0.52, metalness: 0.03, clearcoat: 0.1, clearcoatRoughness: 0.5, side: D, envMap: env, envMapIntensity: 0.22 })),
+    leather: track(new THREE.MeshPhysicalMaterial({ color: 0x1c1c1f, roughness: 0.6, metalness: 0, bumpMap: grain, bumpScale: 0.65, sheen: 0.5, sheenColor: new THREE.Color(0x2e2e35), sheenRoughness: 0.5, side: D, envMap: env, envMapIntensity: 0.28 })),
     pad: track(new THREE.MeshPhysicalMaterial({ color: 0x1c1c1f, roughness: 0.62, metalness: 0, bumpMap: grain, bumpScale: 0.45, sheen: 0.4, sheenColor: new THREE.Color(0x202026), sheenRoughness: 0.6, side: D, envMap: env, envMapIntensity: 0.28 })),
     metal: track(new THREE.MeshStandardMaterial({ color: 0x8d8d95, metalness: 1, roughness: 0.34, side: D, envMap: env, envMapIntensity: 0.38 })),
     darkMetal: track(new THREE.MeshStandardMaterial({ color: 0x202024, metalness: 0.85, roughness: 0.42, side: D, envMap: env, envMapIntensity: 0.4 })),
@@ -131,26 +131,26 @@ export function buildHeadphone(env) {
   const add = (geo, mat, parent = root) => { track(geo); const m = new THREE.Mesh(geo, mat); parent.add(m); return m }
 
   /* headband: plastic band + soft underside pad + dark slider blocks and metal collars at the ends */
-  const cx = 0, cy = 4.2, rx = 8.8, ry = 10.9
-  add(sweep(ellipseSamples(cx, cy, rx, ry, 0.3, Math.PI - 0.3, 100), rrProfile(3.0, 0.95, 0.42)), M.plastic)
-  add(sweep(ellipseSamples(cx, cy, rx, ry, 0.42, Math.PI - 0.42, 90), rrProfile(2.55, 0.7, 0.3), -0.82), M.pad)
-  for (const [a, b] of [[0.0, 0.36], [Math.PI - 0.36, Math.PI]]) add(sweep(ellipseSamples(cx, cy, rx, ry, a, b, 10), rrProfile(1.9, 0.7, 0.26), -0.12), M.darkMetal)
-  for (const [a, b] of [[0.3, 0.36], [Math.PI - 0.36, Math.PI - 0.3]]) add(sweep(ellipseSamples(cx, cy, rx, ry, a, b, 4), rrProfile(2.1, 0.8, 0.28), -0.1), M.metal)
+  const cx = 0, cy = 4.3, rx = 9.1, ry = 11.3
+  add(sweep(ellipseSamples(cx, cy, rx, ry, 0.3, Math.PI - 0.3, 100), rrProfile(3.3, 1.3, 0.55)), M.plastic)
+  add(sweep(ellipseSamples(cx, cy, rx, ry, 0.42, Math.PI - 0.42, 90), rrProfile(2.8, 0.85, 0.38), -1.05), M.pad)
+  for (const [a, b] of [[0.0, 0.42], [Math.PI - 0.42, Math.PI]]) add(sweep(ellipseSamples(cx, cy, rx, ry, a, b, 12), rrProfile(2.7, 1.05, 0.32), -0.15), M.darkMetal)
+  for (const [a, b] of [[0.3, 0.37], [Math.PI - 0.37, Math.PI - 0.3]]) add(sweep(ellipseSamples(cx, cy, rx, ry, a, b, 4), rrProfile(3.0, 1.2, 0.5), -0.05), M.darkMetal)
 
   /* ear cups — each hangs from a pivot at the band end and rests a few degrees splayed */
   for (const side of [1, -1]) {
-    const pivot = new THREE.Group(); pivot.position.set(side * 8.8, 4.2, 0); pivot.rotation.z = -side * TILT; root.add(pivot)
-    const cup = new THREE.Group(); cup.position.set(-side * 0.8, -4.2, 0); pivot.add(cup)
-    const local = new THREE.Group(); local.scale.set(1, 1, 0.84); local.rotation.z = (-side * Math.PI) / 2; cup.add(local)
+    const pivot = new THREE.Group(); pivot.position.set(side * 9.1, 4.3, 0); pivot.rotation.z = -side * TILT; root.add(pivot)
+    const cup = new THREE.Group(); cup.position.set(-side * 0.9, -4.3, 0); pivot.add(cup)
+    const local = new THREE.Group(); local.scale.set(1.1, 1, 0.94); local.rotation.z = (-side * Math.PI) / 2; cup.add(local)
 
     const shell = smooth([[0, 1.28], [1.0, 1.285], [2.0, 1.25], [2.9, 1.17], [3.55, 1.03], [3.98, 0.78], [4.2, 0.4], [4.25, 0], [4.22, -0.55], [4.05, -1.0], [3.7, -1.25]], 80)
     shell.push(V2(3.2, -1.3), V2(0, -1.3))
     const sg = new THREE.LatheGeometry(shell, 120); sg.computeVertexNormals(); add(sg, M.plastic, local)
     const capPts = shell.filter((p) => p.x <= 3.5 && p.y > 0.9)
     const cg = new THREE.LatheGeometry(capPts, 120); cg.computeVertexNormals(); add(cg, M.face, local).scale.setScalar(1.004)
-    const ring = add(new THREE.TorusGeometry(3.6, 0.045, 10, 150), M.metal, local); ring.rotation.x = Math.PI / 2; ring.position.y = 1.09
+    const ring = add(new THREE.TorusGeometry(3.62, 0.035, 10, 150), M.darkMetal, local); ring.rotation.x = Math.PI / 2; ring.position.y = 1.09
 
-    const cush = smooth([[3.3, -1.28], [3.95, -1.3], [4.32, -1.52], [4.42, -1.95], [4.4, -2.6], [4.2, -3.1], [3.8, -3.36], [3.2, -3.46], [2.7, -3.36], [2.45, -3.1], [2.38, -2.6], [2.45, -2.0], [2.7, -1.5], [3.0, -1.3]], 100)
+    const cush = smooth([[3.3, -1.28], [4.0, -1.3], [4.42, -1.55], [4.56, -2.05], [4.54, -2.8], [4.3, -3.4], [3.85, -3.75], [3.2, -3.86], [2.7, -3.72], [2.4, -3.35], [2.3, -2.8], [2.38, -2.1], [2.68, -1.55], [3.0, -1.3]], 100)
     const kg = new THREE.LatheGeometry(cush, 120); kg.computeVertexNormals(); add(kg, M.leather, local)
     const dish = smooth([[0, -3.0], [1.1, -2.95], [1.8, -2.75], [2.15, -2.4]], 20)
     const dg = new THREE.LatheGeometry(dish, 64); dg.computeVertexNormals(); add(dg, M.fabric, local)
@@ -158,11 +158,11 @@ export function buildHeadphone(env) {
 
     const logoMat = track(new THREE.MeshStandardMaterial({ map: logoTexture(), transparent: true, roughness: 0.35, metalness: 0.7, depthWrite: false, envMap: env }))
     const logo = add(new THREE.PlaneGeometry(2.8, 0.88), logoMat, cup)
-    logo.position.set(side * 1.3, -0.1, side * -0.6); logo.rotation.y = (side * Math.PI) / 2
+    logo.position.set(side * 1.3, -0.35, side * -0.95); logo.rotation.y = (side * Math.PI) / 2
     disposables.push(logoMat.map)
 
     // hinge bracket + pivot pin (sits in the pivot frame, so it stays joined to the band as the cup tilts)
-    const yoke = add(new RoundedBoxGeometry(0.9, 2.2, 2.5, 4, 0.32), M.darkMetal, pivot); yoke.position.set(-side * 0.1, 0.35, 0)
+    const yoke = add(new RoundedBoxGeometry(1.1, 2.4, 2.9, 4, 0.36), M.darkMetal, pivot); yoke.position.set(-side * 0.1, 0.3, 0)
     const pin = add(new THREE.CylinderGeometry(0.62, 0.62, 0.4, 36), M.metal, pivot); pin.rotation.z = Math.PI / 2; pin.position.set(side * 0.2, -0.45, 0)
 
     if (side === 1) {                                              // controls + charging port, right cup only
@@ -201,10 +201,11 @@ export async function createViewer({ container, reduced = false, modelUrl = null
   scene.environment = envTex
   if ('environmentIntensity' in scene) scene.environmentIntensity = 1.0
 
-  const key = new THREE.DirectionalLight(0xffffff, 1.2); key.position.set(-18, 26, 24); scene.add(key)
+  const key = new THREE.DirectionalLight(0xffffff, 2.3); key.position.set(-18, 26, 24); scene.add(key)
   const rim = new THREE.DirectionalLight(0xffc900, 0.9); rim.position.set(24, 9, -22); scene.add(rim)
   const rim2 = new THREE.DirectionalLight(0xffd54a, 0.4); rim2.position.set(-26, 6, -16); scene.add(rim2)
-  const fill = new THREE.DirectionalLight(0xffffff, 0.4); fill.position.set(14, 6, 28); scene.add(fill)
+  const fill = new THREE.DirectionalLight(0xffffff, 0.8); fill.position.set(14, 6, 28); scene.add(fill)
+  const top = new THREE.DirectionalLight(0xffffff, 0.9); top.position.set(0, 44, 8); scene.add(top)
 
   // model (+ a dim mirrored copy under the floor line for the glossy-table reflection)
   let model, modelDispose = () => {}, modelHeight = 20
@@ -232,7 +233,7 @@ export async function createViewer({ container, reduced = false, modelUrl = null
   // camera (orbits the headphone; the base is pinned to the floor line of the page)
   const camera = new THREE.PerspectiveCamera(19, 1, 1, 600)
   const target = new THREE.Vector3(0, modelHeight * 0.46, 0)
-  let theta = 0.75, phi = 1.62, radius = 60, W = 1, H = 1, baseFrac = 0.78, vTheta = 0
+  let theta = 1.0, phi = 1.62, radius = 60, W = 1, H = 1, baseFrac = 0.78, vTheta = 0
   let camHeight = 3.2      // camera sits just above the table: with a high camera the near cup dips and the far cup rises as it turns (a see-saw)
   const fit = () => {
     W = container.clientWidth || 1; H = container.clientHeight || 1
