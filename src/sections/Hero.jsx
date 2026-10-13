@@ -18,7 +18,7 @@ export default function Hero() {
   const rm = useReducedMotion()
   const fade = (d) => ({ initial: rm ? false : { opacity: 0, y: 22 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.9, ease: EASE, delay: d } })
   const scrollDown = () => {
-    const el = document.getElementById('collection')
+    const el = document.getElementById('showcase')
     if (!el) return
     window.__lenis ? window.__lenis.scrollTo(el, { duration: 1.4 }) : el.scrollIntoView({ behavior: 'smooth' })
   }
@@ -54,7 +54,7 @@ export default function Hero() {
       <motion.p {...fade(1.3)} className="hidden md:block absolute right-[2.6vw] top-1/2 -translate-y-1/2 vertical eyebrow text-[.62rem] z-10 pointer-events-none">
         Headphones &nbsp;/&nbsp; Earbuds
       </motion.p>
-      <motion.button {...fade(1.4)} onClick={scrollDown} aria-label="Scroll to the collection"
+      <motion.button {...fade(1.4)} onClick={scrollDown} aria-label="Scroll to the headphone showcase"
         className="absolute left-5 md:left-[5.3vw] bottom-6 md:bottom-8 z-10 hidden sm:flex items-center gap-4 eyebrow text-[.6rem]">
         <span className="relative w-px h-10 bg-ink/30 overflow-hidden"><span className="absolute inset-x-0 top-0 h-1/2 bg-ink animate-[scrollcue_1.8s_ease-in-out_infinite]" /></span>Scroll
       </motion.button>

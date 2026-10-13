@@ -1,5 +1,5 @@
 import Hero from '../sections/Hero'
-import Featured from '../sections/Featured'
+import Showcase from '../sections/Showcase'
 import BuiltDifferent from '../sections/BuiltDifferent'
 import MusicMoves from '../sections/MusicMoves'
 import Compare from '../sections/Compare'
@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Featured />
+      <Showcase />
       <BuiltDifferent />
       <MusicMoves />
       <Compare />

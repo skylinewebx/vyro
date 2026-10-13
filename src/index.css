@@ -59,3 +59,11 @@ button { cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 
 @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+
+/* headphone showcase */
+.stage { background: linear-gradient(180deg, #f5ca03 0px, #eec302 calc(var(--floor, 80%) - 160px), #c9a102 calc(var(--floor, 80%) - 20px), #1b1605 calc(var(--floor, 80%) + 10px), #0a0904 100%); }
+.stage-static { background: linear-gradient(180deg, #f5ca03, #eec302); }
+.plate-mask { -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 5%); mask-image: linear-gradient(to bottom, transparent 0, #000 5%); }
+.callout-line { filter: drop-shadow(0 0 1.5px rgba(255,255,255,.85)); }
+.callout-ring { transform-box: fill-box; transform-origin: center; animation: ringpulse 1.8s ease-out infinite; }
+@keyframes ringpulse { 0% { transform: scale(.8); opacity: .75; } 100% { transform: scale(2.8); opacity: 0; } }
